@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %} home page {% endblock%}
+
+{% block content %}
+
+<h1>SEO Keyword Rank Checker</h1>
+<form action="/" method="POST">
+    <label class="form-label" for="domain">Enter your domain:</label>
+    <input class="form-control" type="text" id="domain" name="domain"><br>
+    <label class="form-label" for="keywords">Enter keywords (separated by comma):</label>
+    <input class="form-control" type="text" id="keywords" name="keywords"><br>
+    <label class="form-label" for="region">Select region:</label><br>
+    <select class="form-select" id="region" name="region">
+        <option value="2">vn</option>
+        <option value="1">viet nam </option>
+    </select><br><br>
+    <input class="btn btn-primary" type="submit" value="Check Rank">
+</form><br>
+
+<h2>Results</h2>
+
+{% if no_data %}
+<p>No data available. Please submit a search to see results.</p>
+{% else %}
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Domain</th>
+            <th scope="col">Keywords</th>
+            <th scope="col">Rank</th>
+            <th scope="col">Page</th>
+            <th scope="col">Region</th>
+            <th scope="col">Date Submitted</th>
+            <th scope="col">Actions</th> <!-- New column for actions -->
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in rows %}
+        <tr>
+            <th scope="row">{{ row.sno }}</th>
+            <td>{{ row.domain }}</td>
+            <td>{{ row.keywords }}</td>
+            <td>{{ row.rank }}</td>
+            <td>{{ row.page }}</td>
+            <td>{{ row.region }}</td>
+            <td>{{ row.date_submitted.strftime('%Y-%m-%d') }}</td>
+            <td>
+                <form action="{{ url_for('delete_entry', sno=row.sno) }}" method="post">
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+<!-- <h1>index page </h1>
+<ul>
+    {% for person in people %}
+    <li>{{ person }}</li>
+    {% endfor %}
+</ul>
+
+<h3>new person </h3>
+<form action="{{ url_for('index') }}" method="POST">
+    <input type="text" name="name" placeholder="name"> <br>
+    <input type="number" name="age" placeholder="age"> <br>
+    <input type="text" name="job" placeholder="job"><br>
+    <input type="submit" value="Create">
+</form> -->
+{% endblock%}
